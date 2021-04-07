@@ -1,4 +1,4 @@
-## How to install openfaas in an ubuntu virtual server.
+## How to install Fission Serverless Functions in an Ubuntu 20 VPS.
 
 #### Digital Ocean Refeal Link
 Use the following link to get 100 credit from Digital Ocean. If you use this refeal some credit will be added to my account
@@ -39,22 +39,21 @@ $ export KUBECONFIG=$HOME/.kube/config
 
 6. Install Helm 3
 ```
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+$ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 ```
 
 7. Install Fission
 ```
-export FISSION_NAMESPACE="fission"
-kubectl create namespace $FISSION_NAMESPACE
+$ export FISSION_NAMESPACE="fission"
+$ kubectl create namespace $FISSION_NAMESPACE
 
-helm install --namespace $FISSION_NAMESPACE --name-template fission \
+$ helm install --namespace $FISSION_NAMESPACE --name-template fission \
     https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
-
 ```
 
 8. Install CLI
 ```
-curl -Lo fission https://github.com/fission/fission/releases/download/1.12.0/fission-cli-linux && chmod +x fission && sudo mv fission /usr/local/bin/
+$ curl -Lo fission https://github.com/fission/fission/releases/download/1.12.0/fission-cli-linux && chmod +x fission && sudo mv fission /usr/local/bin/
 ```
 
 9. Check the cli is installed 
@@ -87,5 +86,7 @@ $ kubectl --namespace fission get svc router
 
 # Create an HTTP Trigger with Ingress
 $ fission httptrigger create --name hello-get-http-trigger --function hello --url /hello --method GET --createingress --ingressrule "*=/hello"
-
 ```
+
+
+#### Happy Codding !!!
