@@ -42,61 +42,80 @@ $ export KUBECONFIG=$HOME/.kube/config
 $ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 ```
 
-7. Install Fission with Load Balancer
+7. Crate Fission Namespace
 ```
 $ export FISSION_NAMESPACE="fission"
 $ kubectl create namespace $FISSION_NAMESPACE
-
-$ helm install --namespace $FISSION_NAMESPACE --name-template fission \
-    https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
 ```
 
-8. Install Fission with out LB
-```
-$ export FISSION_NAMESPACE="fission"
-$ kubectl create namespace $FISSION_NAMESPACE
 
+8. Install Fission on K3S, Minikube or any other cluster without LoadBalancer
+```
 $ helm install --namespace $FISSION_NAMESPACE --name-template fission \
     --set serviceType=NodePort,routerServiceType=NodePort,logger.enableSecurityContext=true,prometheus.enabled=false \
     https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
 
 ```
 
-8. Install CLI
+9. Install Fission with Load Balancer, GCP, Azure, Amazon, DigitalOcean
+```
+$ helm install --namespace $FISSION_NAMESPACE --name-template fission \
+    https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
+```
+
+
+10. Install CLI
 ```
 $ curl -Lo fission https://github.com/fission/fission/releases/download/1.12.0/fission-cli-linux && chmod +x fission && sudo mv fission /usr/local/bin/
 ```
 
-9. Check the cli is installed 
+11. Check the cli is installed 
 ```
 $  fission version
 ```
 
-10. Create your first function, environment and router
+#### Create your first function, environment and router
+
+1. Create an environment
 ```
-# Create an environment
 $ fission env create --name nodejs --image fission/node-env
+```
 
-# Get a hello world
+2. Get a hello world sample function
+```
 $ curl https://raw.githubusercontent.com/fission/fission/master/examples/nodejs/hello.js > hello.js
+```
 
-# Register this function with Fission
+3. Register the function with Fission
+```
 $ fission function create --name hello --env nodejs --code hello.js
+```
 
-# Run this function
+4. Test the function
+```
 $ fission function test --name hello
+```
 
-# Create an internal HTTP Trigger
+5. Create an internal HTTP Trigger
+```
 $ fission httptrigger create --name hello-get-http-trigger-internal --url /hello --method GET --function hello
+```
 
-# Test http trigger note that $FISSION_ROUTER is the cluster ip from the router service
-curl http://$FISSION_ROUTER/hello-internal
-
+6. Test http trigger note that $FISSION_ROUTER is the cluster ip from the router service
+```
 # Get the router ip 
 $ kubectl --namespace fission get svc router
 
-# Create an HTTP Trigger with Ingress
-$ fission httptrigger create --name hello-get-http-trigger --function hello --url /hello --method GET --createingress --ingressrule "*=/hello"
+# Set FISSION_ROUTER
+$ export FISSION_ROUTER=ip-from-router-service
+
+# Invoke the function
+$ curl http://$FISSION_ROUTER/hello-internal
+```
+
+7. Create an HTTP Trigger with Ingress
+```
+$ fission httptrigger create --name hello-get-http-trigger --function hello --url /hello-ext --method GET --createingress --ingressrule "*=/hello"
 ```
 
 
