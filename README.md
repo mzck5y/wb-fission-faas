@@ -42,13 +42,24 @@ $ export KUBECONFIG=$HOME/.kube/config
 $ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 ```
 
-7. Install Fission
+7. Install Fission with Load Balancer
 ```
 $ export FISSION_NAMESPACE="fission"
 $ kubectl create namespace $FISSION_NAMESPACE
 
 $ helm install --namespace $FISSION_NAMESPACE --name-template fission \
     https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
+```
+
+8. Install Fission with out LB
+```
+$ export FISSION_NAMESPACE="fission"
+$ kubectl create namespace $FISSION_NAMESPACE
+
+$ helm install --namespace $FISSION_NAMESPACE --name-template fission \
+    --set serviceType=NodePort,routerServiceType=NodePort,logger.enableSecurityContext=true,prometheus.enabled=false \
+    https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
+
 ```
 
 8. Install CLI
@@ -81,7 +92,7 @@ $ fission httptrigger create --name hello-get-http-trigger-internal --url /hello
 # Test http trigger note that $FISSION_ROUTER is the cluster ip from the router service
 curl http://$FISSION_ROUTER/hello-internal
 
-# To the the ip 
+# To the router ip 
 $ kubectl --namespace fission get svc router
 
 # Create an HTTP Trigger with Ingress
