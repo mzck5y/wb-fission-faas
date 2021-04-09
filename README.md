@@ -92,7 +92,7 @@ $ fission httptrigger create --name hello-get-http-trigger-internal --url /hello
 # Test http trigger note that $FISSION_ROUTER is the cluster ip from the router service
 curl http://$FISSION_ROUTER/hello-internal
 
-# To the router ip 
+# Get the router ip 
 $ kubectl --namespace fission get svc router
 
 # Create an HTTP Trigger with Ingress
