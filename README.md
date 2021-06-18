@@ -110,7 +110,7 @@ $ kubectl --namespace fission get svc router
 $ export FISSION_ROUTER=ip-from-router-service
 
 # Invoke the function
-$ curl http://$FISSION_ROUTER/hello-internal
+$ curl http://$FISSION_ROUTER/hello
 ```
 
 7. Create an HTTP Trigger with Ingress
@@ -118,5 +118,22 @@ $ curl http://$FISSION_ROUTER/hello-internal
 $ fission httptrigger create --name hello-get-http-trigger --function hello --url /hello-ext --method GET --createingress --ingressrule "*=/hello"
 ```
 
+
+8. Create an HTTP Trigger with Ingress and TLS termination
+```
+
+fission httptrigger create \
+	--name secure-hello \
+	--url /hello-tls \
+	--function hello \
+	--createingress \
+	--ingressrule="*=/hello-tls" \
+	--ingressannotation="kubernetes.io/ingress.class=traefik" \
+	--ingressannotation="cert-manager.io/cluster-issuer=letsencrypt-staging-onicloud" \
+	--ingressannotation="traefik.ingress.kubernetes.io/preserve-host=true" \
+	--ingressannotation="traefik.ingress.kubernetes.io/redirect-entry-point=https" \
+	--ingresstls="letsencrypt-staging-kira"
+
+```
 
 #### Happy Codding !!!

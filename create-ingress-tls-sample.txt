@@ -1,0 +1,11 @@
+fission httptrigger create \
+	--name intent-slash-endpoint \
+	--url /slash \
+	--function hello \
+	--createingress \
+	--ingressrule="dev.mivaro.net=/slash" \
+	--ingressannotation="kubernetes.io/ingress.class=traefik" \
+	--ingressannotation="cert-manager.io/cluster-issuer=letsencrypt-staging-onicloud" \
+	--ingressannotation="traefik.ingress.kubernetes.io/preserve-host=true" \
+	--ingressannotation="traefik.ingress.kubernetes.io/redirect-entry-point=https" \
+	--ingresstls="letsencrypt-staging-kira"
