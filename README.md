@@ -114,14 +114,20 @@ $ curl http://$FISSION_ROUTER/hello
 ```
 
 7. Create an HTTP Trigger with Ingress
-```
-$ fission httptrigger create --name hello-get-http-trigger --function hello --url /hello-ext --method GET --createingress --ingressrule "*=/hello"
-```
 
+```
+fission httptrigger create \
+	--name hello-get-http-trigger \
+	--function hello \
+	--url /hello \
+	--method GET \
+	--createingress \
+	--ingressrule "*=/hello"
+```
 
 8. Create an HTTP Trigger with Ingress and TLS termination
-```
 
+```
 fission httptrigger create \
 	--name secure-hello \
 	--url /hello-tls \
