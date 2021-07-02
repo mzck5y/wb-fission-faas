@@ -48,8 +48,9 @@ $ export FISSION_NAMESPACE="fission"
 $ kubectl create namespace $FISSION_NAMESPACE
 ```
 
+## Install Fission Version 12
 
-8. Install Fission on K3S, Minikube or any other cluster without LoadBalancer
+### Install Fission on K3S, Minikube or any other cluster without LoadBalancer
 ```
 $ helm install --namespace $FISSION_NAMESPACE --name-template fission \
     --set serviceType=NodePort,routerServiceType=NodePort,logger.enableSecurityContext=true,prometheus.enabled=false \
@@ -57,19 +58,35 @@ $ helm install --namespace $FISSION_NAMESPACE --name-template fission \
 
 ```
 
-9. Install Fission with Load Balancer, GCP, Azure, Amazon, DigitalOcean
+### Install Fission with Load Balancer, GCP, Azure, Amazon, DigitalOcean
 ```
 $ helm install --namespace $FISSION_NAMESPACE --name-template fission \
     https://github.com/fission/fission/releases/download/1.12.0/fission-all-1.12.0.tgz
 ```
 
+# Install Fission Version 13
+```
+$ kubectl create -k "github.com/fission/fission/crds/v1?ref=1.13.1"
+$ helm repo add fission-charts https://fission.github.io/fission-charts/
+$ helm repo update
+```
 
-10. Install CLI
+### Install Fission on K3S, Minikube or any other cluster without LoadBalancer
+```
+$ helm install --version 1.13.1 --namespace $FISSION_NAMESPACE --set serviceType=NodePort,routerServiceType=NodePort,logger.enableSecurityContext=true,prometheus.enabled=false fission fission-charts/fission-all
+```
+
+### Install Fission with Load Balancer, GCP, Azure, Amazon, DigitalOcean
+```
+$ helm install --version 1.13.1 --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
+```
+
+### Install CLI
 ```
 $ curl -Lo fission https://github.com/fission/fission/releases/download/1.12.0/fission-cli-linux && chmod +x fission && sudo mv fission /usr/local/bin/
 ```
 
-11. Check the cli is installed 
+### Check the cli is installed 
 ```
 $  fission version
 ```
